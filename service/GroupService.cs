@@ -1,11 +1,14 @@
 using Model.group;
+using Model.user;
 using Repository.groupRepository;
 
 namespace Service.groupService{
     public class GroupService{
-        GroupRepository groupRepository;
+        private Dictionary<Group,List<User>> connectedUsersInGroup;
+        private GroupRepository groupRepository;
 
         public GroupService(){
+            connectedUsersInGroup = new Dictionary<Group, List<User>>();
             groupRepository = new GroupRepository();   
         }
 
@@ -19,13 +22,12 @@ namespace Service.groupService{
                 return null;
             }
         }
-        
-        public bool isActivate(long gid){
-            Group group = groupRepository.Get(gid);
-            if(group.getActiveBit() == 0){
-                return false;
-            }
-            return true;
+        public Task JoinGroup(long gid, User user){
+            
+            return Task.CompletedTask;
         }
+        
+        
+       
     }
 }

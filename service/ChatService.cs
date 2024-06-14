@@ -78,25 +78,7 @@ namespace Service.chatservice
                 
             }
             return Task.CompletedTask;
-//                 Console.WriteLine("ReadGroup Start" + user.ToString());
-//                 string groupInfo = user.Reader.ReadLine()!;
-//                 if(groupInfo != null){
-//                     Group group = groupService.GetGroup(groupInfo);
-//                     if(group == null){
-//                         continue;
-//                     }
-//                     if (chatGroups.TryGetValue(group, out tmp!)){
-//                         chatGroups[group].Add(user);
-//                         return Task.CompletedTask;
-//                     }
-                    
-//                     else{
-//                         chatGroups[group] = new List<User> { user };
-//                         Thread newGroupControl = new Thread(async () => {
-//                             await ReadAndSendMessageAsync(group,user);
-//                         });
-//                         return Task.CompletedTask;
-//                     }
+
         }
         void RequestMatcher(string[] splitedRequest){
             int reqType = int.Parse(splitedRequest[0]);
