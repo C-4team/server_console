@@ -41,7 +41,7 @@ namespace Repository.userRepository{
         // 변경된 사용자 정보 파일에 씀
         using (var writer = new StreamWriter(fileName, false))
         {
-            writer.WriteLine("id,username,password");
+            writer.WriteLine("valid,id,username,password");
             foreach(var user in users)
             {
                 writer.WriteLine(user.ToString());
@@ -92,7 +92,7 @@ namespace Repository.userRepository{
         // 변경된 사용자 정보 파일에 씀
         using (var writer = new StreamWriter(fileName, false))
         {
-            writer.WriteLine("id,username,password");
+            writer.WriteLine("valid,id,username,password");
             foreach (var user in users)
             {
                 writer.WriteLine(user.ToString());
