@@ -4,7 +4,7 @@ using Model.user;
 namespace Repository.userRepository{
     public class UserRepository : RepositoryInterface<long,User>
 {
-    const string fileName = "../csv/user.csv";
+    const string fileName = "./csv/user.csv";
 
     // 여기부터 추가 - 5/28(화)
     public UserRepository()
@@ -49,7 +49,7 @@ namespace Repository.userRepository{
         }
     }
 
-    public User Get(int id)
+    public User Get(long id)
     {
         using (var reader = new StreamReader(fileName))
         {

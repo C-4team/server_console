@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,10 +15,34 @@ namespace Model.user{
         private string username;
 
         private string password;
+
+        private TcpClient tcpClient;
+        private NetworkStream networkStream;
+
+        private StreamReader reader;
+
+        private StreamWriter writer;
+
+        public TcpClient TCPclient{
+            get{return tcpClient;}
+            set{tcpClient = value;}
+        }
         
-        public User(int valid, long id, string username, string password)
+        public NetworkStream NetStream{
+            get{return networkStream;}
+            set {networkStream = value;}
+        }
+        public StreamReader Reader{
+            get { return reader; }
+            set {  reader = value; }
+        }
+        public StreamWriter Writer{
+            get { return writer; }
+            set { writer = value; }
+        }
+        
+        public User(long id, string username, string password)
         {
-            this.valid = valid;
             this.id = id;
             this.username = username;
             this.password = password;
@@ -51,7 +76,7 @@ namespace Model.user{
         public static User parseUser(string bytes)
         {
             string[] userInfo = bytes.Split(',');
-            return new User(int.Parse(userInfo[0]), long.Parse(userInfo[1]), userInfo[2], userInfo[3]);
+            return new User(long.Parse(userInfo[1]), userInfo[2], userInfo[3]);
         }
     }
 
