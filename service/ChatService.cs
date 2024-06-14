@@ -28,6 +28,7 @@ namespace Service.chatservice
         public ChatService() 
         {
             this.chatGroups = new Dictionary<Group, List<User>>();
+            
             listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 12000);
             listener.Start();
             acceptRequestDeamon();
