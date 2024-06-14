@@ -72,6 +72,7 @@ namespace Service.chatservice
             List<User> tmp;
             while (true)
             {
+                Console.WriteLine("ReadGroup Start" + user.ToString());
                 string groupInfo = user.Reader.ReadLine()!;
                 if(groupInfo != null){
                     Group group = groupService.GetGroup(groupInfo);
