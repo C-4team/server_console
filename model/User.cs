@@ -6,24 +6,27 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Model.user{
-    public class User
-    {   
-        
+     public class User{
+        private int valid;  // 로그인/회원가입 확인용
+
         private long id;
 
         private string username;
 
         private string password;
-
-        private StreamReader reader;
-
-        private StreamWriter writer;
         
-        public User(long id, string username, string password)
+        public User(int valid, long id, string username, string password)
         {
+            this.valid = valid;
             this.id = id;
             this.username = username;
             this.password = password;
+        }
+
+        public int Valid
+        {
+            get { return valid; }
+            set { valid = value; }
         }
 
         public long Id { 
@@ -38,31 +41,19 @@ namespace Model.user{
             get { return password;}
             set { password = value; }
         }
-        public StreamReader Reader
-        {
-            get { return reader; }
-            set {  reader = value; }
-        }
-        public StreamWriter Writer
-        {
-            get { return writer; }
-            set { writer = value; }
-        }
-
       
         // 여기 부분 수정
         public override string ToString()
         {
-            return $"{id},{username},{password}";
+            return $"{valid},{id},{username},{password}";
         }
 
         public static User parseUser(string bytes)
         {
             string[] userInfo = bytes.Split(',');
-            return new User(long.Parse(userInfo[0]), userInfo[1], userInfo[2]);
+            return new User(int.Parse(userInfo[0]), long.Parse(userInfo[1]), userInfo[2], userInfo[3]);
         }
     }
-
 
 }
     // UserModel로 Spring Model로 생각하면 됨.
