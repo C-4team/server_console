@@ -20,6 +20,13 @@ namespace Service.groupService{
                 return null;
             }
         }
-
+        
+        public bool isActivate(long gid){
+            Group group = groupRepository.Get(gid);
+            if(group.getActiveBit() == 0){
+                return false;
+            }
+            return true;
+        }
     }
 }

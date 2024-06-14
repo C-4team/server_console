@@ -4,7 +4,7 @@ using Model.user;
 namespace Repository.userRepository{
     public class UserRepository : RepositoryInterface<long,User>
 {
-    const string fileName = "../csv/user.csv";
+    const string fileName = "./csv/user.csv";
 
     // 여기부터 추가 - 5/28(화)
     public UserRepository()

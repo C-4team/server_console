@@ -12,17 +12,22 @@ namespace Model.group
     {
         private long groupId;
         private string groupedName;
+        private int activeBit;
         private List<User> users;
 
         public Group(long groupId, List<User> users)
         {
             this.groupId = groupId;
             this.users = users;
+            this.activeBit = 1;
 
         }
         public long getGroupId()
         {
             return groupId;
+        }
+        public int getActiveBit(){
+            return activeBit;
         }
 
         public List<User> getUsers() 
