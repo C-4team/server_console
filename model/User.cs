@@ -14,6 +14,19 @@ namespace Model.user{
         private string username;
 
         private string password;
+
+        private StreamReader reader;
+
+        private StreamWriter writer;
+        
+        public StreamReader Reader{
+            get { return reader; }
+            set {  reader = value; }
+        }
+        public StreamWriter Writer{
+            get { return writer; }
+            set { writer = value; }
+        }
         
         public User(int valid, long id, string username, string password)
         {

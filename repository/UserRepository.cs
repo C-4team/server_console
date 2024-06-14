@@ -49,7 +49,7 @@ namespace Repository.userRepository{
         }
     }
 
-    public User Get(int id)
+    public User Get(long id)
     {
         using (var reader = new StreamReader(fileName))
         {
