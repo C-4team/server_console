@@ -41,6 +41,7 @@ namespace Service.chatservice
                 StreamWriter newClientWriter = new StreamWriter(newClientStream);
                 StreamReader newClientStreamReader = new StreamReader(newClientStream);
                 string userInfo = newClientStreamReader.ReadToEnd();
+                Console.WriteLine(userInfo);
                 User newUser = User.parseUser(userInfo);
                 newUser.TCPclient = newClient;
                 newUser.NetStream = newClientStream;
