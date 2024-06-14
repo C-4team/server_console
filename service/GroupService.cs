@@ -14,7 +14,6 @@ namespace Service.groupService{
             long gid;
             if(long.TryParse(info[0], out gid)){
                 return groupRepository.Get(gid);
-                
             }
             else{
                 return null;

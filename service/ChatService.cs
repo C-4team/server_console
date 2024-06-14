@@ -70,13 +70,14 @@ namespace Service.chatservice
         
 
         Task RequestController(User user){
-            while (true){
+            while (user.TCPclient.Connected){
                 string request = user.Reader.ReadLine()!;
                 string[] splitedRequest = request.Split(',');
                 
                 RequestMatcher(splitedRequest);
                 
             }
+            return Task.CompletedTask;
 //                 Console.WriteLine("ReadGroup Start" + user.ToString());
 //                 string groupInfo = user.Reader.ReadLine()!;
 //                 if(groupInfo != null){
@@ -100,9 +101,7 @@ namespace Service.chatservice
         void RequestMatcher(string[] splitedRequest){
             int reqType = int.Parse(splitedRequest[0]);
             switch(reqType){
-                case 1:
                 
-                    break;
                 case 2:
 
                     break;

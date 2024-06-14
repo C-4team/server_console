@@ -17,6 +17,7 @@ namespace Model.user{
         private string password;
 
         private TcpClient tcpClient;
+        
         private NetworkStream networkStream;
 
         private StreamReader reader;
