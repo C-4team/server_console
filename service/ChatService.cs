@@ -36,7 +36,6 @@ namespace Service.chatservice
         public void acceptRequestDeamon(){
 
             while (true){
-
                 TcpClient newClient = listener.AcceptTcpClient();
                 NetworkStream newClientStream = newClient.GetStream();
                 StreamWriter newClientWriter = new StreamWriter(newClientStream);
@@ -47,7 +46,7 @@ namespace Service.chatservice
                 newUser.NetStream = newClientStream;
                 newUser.Writer = newClientWriter;
                 newUser.Reader = newClientStreamReader;
-
+                Console.WriteLine(newUser.ToString());
                 _ = ReadDataAsync(newUser);
             }
         }
