@@ -19,7 +19,6 @@ namespace Service.chatservice
 {
     public class ChatService
     {
-        private UserRepository userRepository;
         private GroupService groupService;
         private TcpListener listener;
         
@@ -28,33 +27,36 @@ namespace Service.chatservice
 
         public ChatService() 
         {
-            this.userRepository = new UserRepository();
             this.chatGroups = new Dictionary<Group, List<User>>();
             listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 12000);
             listener.Start();
+            acceptRequestDeamon();
         }
         public void acceptRequestDeamon(){
 
             while (true){
                 TcpClient newClient = listener.AcceptTcpClient();
                 NetworkStream newClientStream = newClient.GetStream();
-                StreamWriter newClientWriter = new StreamWriter(newClientStream);
-                StreamReader newClientStreamReader = new StreamReader(newClientStream);
-                string userInfo = newClientStreamReader.ReadToEnd();
+                StreamWriter newClientWriter = new StreamWriter(newClientStream,Encoding.UTF8){AutoFlush = true};
+                StreamReader newClientStreamReader = new StreamReader(newClientStream,Encoding.UTF8);
+                string userInfo = newClientStreamReader.ReadLine()!;
+                
                 Console.WriteLine(userInfo);
-                User newUser = User.parseUser(userInfo);
+                User newUser = User.parseUser(userInfo!);
                 newUser.TCPclient = newClient;
                 newUser.NetStream = newClientStream;
                 newUser.Writer = newClientWriter;
                 newUser.Reader = newClientStreamReader;
                 Console.WriteLine(newUser.ToString());
-                _ = ReadDataAsync(newUser);
+
+                _ = ReadGroupInfoAsync(newUser);
             }
         }
 
-        private async Task ReadAndSendMessageAsync(Group group, User user){
-            while(chatGroups[group].Count > 0 && user.TCPclient.Connected ){
-                string msg =  user.Reader.ReadLine();
+        private Task ReadAndSendMessageAsync(Group group, User user)
+        {
+            while (chatGroups[group].Count > 0 && user.TCPclient.Connected ){
+                string msg =  user.Reader.ReadLine()!;
                 if(msg == null){
                     break;
                 }
@@ -62,32 +64,34 @@ namespace Service.chatservice
                     avaliableUser.Writer.WriteLine(msg);
                 }
             }
+
+            return Task.CompletedTask;
         }
-        async Task ReadDataAsync(User user){
+
+        Task ReadGroupInfoAsync(User user){
             List<User> tmp;
             while (true)
             {
-                string groupInfo = user.Reader.ReadLine();
+                string groupInfo = user.Reader.ReadLine()!;
                 if(groupInfo != null){
                     Group group = groupService.GetGroup(groupInfo);
                     if(group == null){
                         continue;
                     }
-                    if (chatGroups.TryGetValue(group,out tmp)){
+                    if (chatGroups.TryGetValue(group, out tmp!)){
                         chatGroups[group].Add(user);
-                        return;
-                    }
+                        return Task.CompletedTask;
+                    }
                     
                     else{
                         chatGroups[group] = new List<User> { user };
-                        Thread newGroupControl = new Thread(() => {
-                            ReadAndSendMessageAsync(group,user);
+                        Thread newGroupControl = new Thread(async () => {
+                            await ReadAndSendMessageAsync(group,user);
                         });
-                        return;
-                    }
+                        return Task.CompletedTask;
+                    }
                 }
             }
-            
         }
     }
 }
