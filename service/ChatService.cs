@@ -75,13 +75,13 @@ namespace Service.chatservice
                 string request = user.Reader.ReadLine()!;
                 string[] splitedRequest = request.Split(',');
                 
-                RequestMatcher(splitedRequest);
+                RequestMatcher(user, splitedRequest);
                 
             }
             return Task.CompletedTask;
 
         }
-        void RequestMatcher(string[] splitedRequest){
+        async void RequestMatcher(User user ,string[] splitedRequest){
             int reqType = int.Parse(splitedRequest[0]);
             switch(reqType){
                 
