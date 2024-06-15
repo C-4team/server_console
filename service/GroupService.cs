@@ -12,22 +12,25 @@ namespace Service.groupService{
             groupRepository = new GroupRepository();   
         }
 
-        public Group GetGroup(string groupInfo){
-            string[] info = groupInfo.Split(',');
-            long gid;
-            if(long.TryParse(info[0], out gid)){
-                return groupRepository.Get(gid);
-            }
-            else{
-                return null;
-            }
-        }
-        public Task JoinGroup(long gid, User user){
+        
+        public Task JoinGroup(string info){
             
             return Task.CompletedTask;
         }
         
-        
+        public Task CreateGroup(string info){
+
+            string[] splitedInfo = info.Split(",");
+            
+            
+
+            return Task.CompletedTask;
+
+        }
+        public Task InviteUserInGroup(string info){
+
+            return Task.CompletedTask;
+        }
        
     }
 }

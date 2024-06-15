@@ -86,7 +86,7 @@ namespace Service.chatservice
             switch(reqType){
                 
                 case 2:
-
+                    
                     break;
                 case 3:
 

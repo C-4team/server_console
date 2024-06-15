@@ -32,13 +32,13 @@ namespace server_console.dataset {
         
         private User_in_GroupDataTable tableUser_in_Group;
         
-        private global::System.Data.DataRelation relationFK_Group_Message;
-        
         private global::System.Data.DataRelation relationFK_User_Message;
         
-        private global::System.Data.DataRelation relationFK_Group_User_in_Group;
+        private global::System.Data.DataRelation relationFK_Group_Message;
         
         private global::System.Data.DataRelation relationFK_User_User_in_Group;
+        
+        private global::System.Data.DataRelation relationFK_Group_User_in_Group;
         
         private global::System.Data.SchemaSerializationMode _schemaSerializationMode = global::System.Data.SchemaSerializationMode.IncludeSchema;
         
@@ -274,10 +274,10 @@ namespace server_console.dataset {
                     this.tableUser_in_Group.InitVars();
                 }
             }
-            this.relationFK_Group_Message = this.Relations["FK_Group_Message"];
             this.relationFK_User_Message = this.Relations["FK_User_Message"];
-            this.relationFK_Group_User_in_Group = this.Relations["FK_Group_User_in_Group"];
+            this.relationFK_Group_Message = this.Relations["FK_Group_Message"];
             this.relationFK_User_User_in_Group = this.Relations["FK_User_User_in_Group"];
+            this.relationFK_Group_User_in_Group = this.Relations["FK_Group_User_in_Group"];
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -297,13 +297,6 @@ namespace server_console.dataset {
             this.tableUser_in_Group = new User_in_GroupDataTable();
             base.Tables.Add(this.tableUser_in_Group);
             global::System.Data.ForeignKeyConstraint fkc;
-            fkc = new global::System.Data.ForeignKeyConstraint("FK_Group_Message", new global::System.Data.DataColumn[] {
-                        this.tableGroup.gidColumn}, new global::System.Data.DataColumn[] {
-                        this.tableMessage.gidColumn});
-            this.tableMessage.Constraints.Add(fkc);
-            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
-            fkc.DeleteRule = global::System.Data.Rule.Cascade;
-            fkc.UpdateRule = global::System.Data.Rule.Cascade;
             fkc = new global::System.Data.ForeignKeyConstraint("FK_User_Message", new global::System.Data.DataColumn[] {
                         this.tableUser.uidColumn}, new global::System.Data.DataColumn[] {
                         this.tableMessage.uidColumn});
@@ -311,10 +304,10 @@ namespace server_console.dataset {
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            fkc = new global::System.Data.ForeignKeyConstraint("FK_Group_User_in_Group", new global::System.Data.DataColumn[] {
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_Group_Message", new global::System.Data.DataColumn[] {
                         this.tableGroup.gidColumn}, new global::System.Data.DataColumn[] {
-                        this.tableUser_in_Group.gidColumn});
-            this.tableUser_in_Group.Constraints.Add(fkc);
+                        this.tableMessage.gidColumn});
+            this.tableMessage.Constraints.Add(fkc);
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
@@ -325,22 +318,29 @@ namespace server_console.dataset {
             fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
             fkc.DeleteRule = global::System.Data.Rule.Cascade;
             fkc.UpdateRule = global::System.Data.Rule.Cascade;
-            this.relationFK_Group_Message = new global::System.Data.DataRelation("FK_Group_Message", new global::System.Data.DataColumn[] {
+            fkc = new global::System.Data.ForeignKeyConstraint("FK_Group_User_in_Group", new global::System.Data.DataColumn[] {
                         this.tableGroup.gidColumn}, new global::System.Data.DataColumn[] {
-                        this.tableMessage.gidColumn}, false);
-            this.Relations.Add(this.relationFK_Group_Message);
+                        this.tableUser_in_Group.gidColumn});
+            this.tableUser_in_Group.Constraints.Add(fkc);
+            fkc.AcceptRejectRule = global::System.Data.AcceptRejectRule.None;
+            fkc.DeleteRule = global::System.Data.Rule.Cascade;
+            fkc.UpdateRule = global::System.Data.Rule.Cascade;
             this.relationFK_User_Message = new global::System.Data.DataRelation("FK_User_Message", new global::System.Data.DataColumn[] {
                         this.tableUser.uidColumn}, new global::System.Data.DataColumn[] {
                         this.tableMessage.uidColumn}, false);
             this.Relations.Add(this.relationFK_User_Message);
-            this.relationFK_Group_User_in_Group = new global::System.Data.DataRelation("FK_Group_User_in_Group", new global::System.Data.DataColumn[] {
+            this.relationFK_Group_Message = new global::System.Data.DataRelation("FK_Group_Message", new global::System.Data.DataColumn[] {
                         this.tableGroup.gidColumn}, new global::System.Data.DataColumn[] {
-                        this.tableUser_in_Group.gidColumn}, false);
-            this.Relations.Add(this.relationFK_Group_User_in_Group);
+                        this.tableMessage.gidColumn}, false);
+            this.Relations.Add(this.relationFK_Group_Message);
             this.relationFK_User_User_in_Group = new global::System.Data.DataRelation("FK_User_User_in_Group", new global::System.Data.DataColumn[] {
                         this.tableUser.uidColumn}, new global::System.Data.DataColumn[] {
                         this.tableUser_in_Group.uidColumn}, false);
             this.Relations.Add(this.relationFK_User_User_in_Group);
+            this.relationFK_Group_User_in_Group = new global::System.Data.DataRelation("FK_Group_User_in_Group", new global::System.Data.DataColumn[] {
+                        this.tableGroup.gidColumn}, new global::System.Data.DataColumn[] {
+                        this.tableUser_in_Group.gidColumn}, false);
+            this.Relations.Add(this.relationFK_Group_User_in_Group);
         }
         
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -721,6 +721,8 @@ namespace server_console.dataset {
             
             private global::System.Data.DataColumn columngid;
             
+            private global::System.Data.DataColumn columnname;
+            
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public GroupDataTable() {
@@ -764,6 +766,14 @@ namespace server_console.dataset {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public global::System.Data.DataColumn nameColumn {
+                get {
+                    return this.columnname;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             [global::System.ComponentModel.Browsable(false)]
             public int Count {
                 get {
@@ -799,10 +809,11 @@ namespace server_console.dataset {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public GroupRow AddGroupRow() {
+            public GroupRow AddGroupRow(string name) {
                 GroupRow rowGroupRow = ((GroupRow)(this.NewRow()));
                 object[] columnValuesArray = new object[] {
-                        null};
+                        null,
+                        name};
                 rowGroupRow.ItemArray = columnValuesArray;
                 this.Rows.Add(rowGroupRow);
                 return rowGroupRow;
@@ -826,6 +837,7 @@ namespace server_console.dataset {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             internal void InitVars() {
                 this.columngid = base.Columns["gid"];
+                this.columnname = base.Columns["name"];
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -833,6 +845,8 @@ namespace server_console.dataset {
             private void InitClass() {
                 this.columngid = new global::System.Data.DataColumn("gid", typeof(long), null, global::System.Data.MappingType.Element);
                 base.Columns.Add(this.columngid);
+                this.columnname = new global::System.Data.DataColumn("name", typeof(string), null, global::System.Data.MappingType.Element);
+                base.Columns.Add(this.columnname);
                 this.Constraints.Add(new global::System.Data.UniqueConstraint("gid", new global::System.Data.DataColumn[] {
                                 this.columngid}, false));
                 this.columngid.AutoIncrement = true;
@@ -1681,6 +1695,22 @@ namespace server_console.dataset {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public string name {
+                get {
+                    try {
+                        return ((string)(this[this.tableGroup.nameColumn]));
+                    }
+                    catch (global::System.InvalidCastException e) {
+                        throw new global::System.Data.StrongTypingException("\'Group\' 테이블의 \'name\' 열의 값이 DBNull입니다.", e);
+                    }
+                }
+                set {
+                    this[this.tableGroup.nameColumn] = value;
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public bool IsgidNull() {
                 return this.IsNull(this.tableGroup.gidColumn);
             }
@@ -1689,6 +1719,18 @@ namespace server_console.dataset {
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public void SetgidNull() {
                 this[this.tableGroup.gidColumn] = global::System.Convert.DBNull;
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public bool IsnameNull() {
+                return this.IsNull(this.tableGroup.nameColumn);
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public void SetnameNull() {
+                this[this.tableGroup.nameColumn] = global::System.Convert.DBNull;
             }
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
@@ -1794,23 +1836,23 @@ namespace server_console.dataset {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public GroupRow GroupRow {
-                get {
-                    return ((GroupRow)(this.GetParentRow(this.Table.ParentRelations["FK_Group_Message"])));
-                }
-                set {
-                    this.SetParentRow(value, this.Table.ParentRelations["FK_Group_Message"]);
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public UserRow UserRow {
                 get {
                     return ((UserRow)(this.GetParentRow(this.Table.ParentRelations["FK_User_Message"])));
                 }
                 set {
                     this.SetParentRow(value, this.Table.ParentRelations["FK_User_Message"]);
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public GroupRow GroupRow {
+                get {
+                    return ((GroupRow)(this.GetParentRow(this.Table.ParentRelations["FK_Group_Message"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_Group_Message"]);
                 }
             }
             
@@ -1911,23 +1953,23 @@ namespace server_console.dataset {
             
             [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
             [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
-            public GroupRow GroupRow {
-                get {
-                    return ((GroupRow)(this.GetParentRow(this.Table.ParentRelations["FK_Group_User_in_Group"])));
-                }
-                set {
-                    this.SetParentRow(value, this.Table.ParentRelations["FK_Group_User_in_Group"]);
-                }
-            }
-            
-            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
             public UserRow UserRow {
                 get {
                     return ((UserRow)(this.GetParentRow(this.Table.ParentRelations["FK_User_User_in_Group"])));
                 }
                 set {
                     this.SetParentRow(value, this.Table.ParentRelations["FK_User_User_in_Group"]);
+                }
+            }
+            
+            [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+            [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Data.Design.TypedDataSetGenerator", "17.0.0.0")]
+            public GroupRow GroupRow {
+                get {
+                    return ((GroupRow)(this.GetParentRow(this.Table.ParentRelations["FK_Group_User_in_Group"])));
+                }
+                set {
+                    this.SetParentRow(value, this.Table.ParentRelations["FK_Group_User_in_Group"]);
                 }
             }
             
