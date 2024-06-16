@@ -9,7 +9,7 @@ namespace Service.userService{
         public UserService(){
             userRepository = new UserRepository();   
         }
-
+        
         // 회원가입
         public int Register(User newUser) {
             var existUser = userRepository.Get(newUser.Id);

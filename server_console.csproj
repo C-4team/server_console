@@ -8,7 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+<<<<<<< HEAD
     <PackageReference Include="System.Data.Common" Version="4.3.0" />
+=======
+    <Compile Update="dataset\DataBase.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DataBase.xsd</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="dataset\DataBase.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DataBase.Designer.cs</LastGenOutput>
+    </None>
+>>>>>>> fdf3293dcde363ef0da9ee49740d5f5094edc162
   </ItemGroup>
 
 </Project>

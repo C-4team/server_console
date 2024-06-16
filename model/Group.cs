@@ -11,28 +11,32 @@ namespace Model.group
     public class Group
     {
         private long groupId;
-        private string groupedName;
-        private int activeBit;
+        private string groupName;
         private List<User> users;
 
-        public Group(long groupId, List<User> users)
+        public Group(long groupId, string groupName , List<User> users)
         {
             this.groupId = groupId;
             this.users = users;
-            this.activeBit = 1;
 
         }
-        public long getGroupId()
-        {
-            return groupId;
+        public Group(string groupName,List<User> users){
+            this.groupName = groupName;
+            this.users = users;
         }
-        public int getActiveBit(){
-            return activeBit;
+        public string GroupName{
+            get{return groupName;}
         }
-
-        public List<User> getUsers() 
-        {
-            return users;
+        public long GroupId{
+            get{return groupId;}
+        }
+        public void AddUser(User user){
+            users.Add(user);
+        }
+        public List<User> Users {
+            get{
+                return users;
+            }
         }
         public static long parseGroupId(string info)
         {

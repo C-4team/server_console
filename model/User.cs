@@ -19,6 +19,7 @@ namespace Model.user{
         private List<long> friends;   // 친구 목록
 
         private TcpClient tcpClient;
+        
         private NetworkStream networkStream;
 
         private StreamReader reader;
