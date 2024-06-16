@@ -28,6 +28,7 @@ namespace Service.chatservice
         public ChatService() 
         {
             this.chatGroups = new Dictionary<Group, List<User>>();
+            
             listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 12000);
             listener.Start();
             acceptRequestDeamon();
@@ -70,41 +71,22 @@ namespace Service.chatservice
         
 
         Task RequestController(User user){
-            while (true){
+            while (user.TCPclient.Connected){
                 string request = user.Reader.ReadLine()!;
                 string[] splitedRequest = request.Split(',');
                 
-                RequestMatcher(splitedRequest);
+                RequestMatcher(user, splitedRequest);
                 
             }
-//                 Console.WriteLine("ReadGroup Start" + user.ToString());
-//                 string groupInfo = user.Reader.ReadLine()!;
-//                 if(groupInfo != null){
-//                     Group group = groupService.GetGroup(groupInfo);
-//                     if(group == null){
-//                         continue;
-//                     }
-//                     if (chatGroups.TryGetValue(group, out tmp!)){
-//                         chatGroups[group].Add(user);
-//                         return Task.CompletedTask;
-//                     }
-                    
-//                     else{
-//                         chatGroups[group] = new List<User> { user };
-//                         Thread newGroupControl = new Thread(async () => {
-//                             await ReadAndSendMessageAsync(group,user);
-//                         });
-//                         return Task.CompletedTask;
-//                     }
+            return Task.CompletedTask;
+
         }
-        void RequestMatcher(string[] splitedRequest){
+        async void RequestMatcher(User user ,string[] splitedRequest){
             int reqType = int.Parse(splitedRequest[0]);
             switch(reqType){
-                case 1:
                 
-                    break;
                 case 2:
-
+                    
                     break;
                 case 3:
 
