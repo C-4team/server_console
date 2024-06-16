@@ -19,7 +19,6 @@ namespace Repository.groupRepository{
         {
             throw new NotImplementedException();
         }
-
         public Group Get(long id){
             var qurry = 
                 from g in db.Tables["Group"].AsEnumerable()
@@ -54,6 +53,7 @@ namespace Repository.groupRepository{
             dataRow["gid"] = group.GroupId;
             dataRow["uid"] = user.Id;
             group_in_user.Rows.Add(dataRow);
+            
         }
         public void Update(long id, Group item)
         {
