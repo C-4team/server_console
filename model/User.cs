@@ -16,6 +16,8 @@ namespace Model.user{
 
         private string password;
 
+        private List<long> friends;   // 친구 목록
+
         private TcpClient tcpClient;
         
         private NetworkStream networkStream;
@@ -47,6 +49,7 @@ namespace Model.user{
             this.id = id;
             this.username = username;
             this.password = password;
+            this.friends = new List<long>();   // 친구 목록 초기화
         }
 
         public int Valid
@@ -67,17 +70,41 @@ namespace Model.user{
             get { return password;}
             set { password = value; }
         }
+
+        public List<long> Friends {
+            get { return friends; }
+            set { friends = value; }
+        }
       
-        // 여기 부분 수정
-        public override string ToString()
+        // 회원가입/로그인 시 사용되는 문자열 반환
+        public string ToLoginString()
         {
             return $"{valid},{id},{username},{password}";
         }
 
+        // (친구 목록 포함) 전체 정보 반환
+        public override string ToString()
+        {
+            var friendsStr = string.Join(";", friends);
+            return $"{valid},{id},{username},{password},{friendsStr}";
+        }
+
+        // 회원가입/로그인 시 사용되는 문자열 파싱
         public static User parseUser(string bytes)
         {
             string[] userInfo = bytes.Split(',');
             return new User(long.Parse(userInfo[1]), userInfo[2], userInfo[3]);
+        }
+
+        // 친구 목록 포함한 문자열 파싱
+        public static User parseUserWithFriends(string bytes) {
+            string[] userInfo = bytes.Split(',');
+            var friends = userInfo.Length > 4 ? userInfo[4].Split(';')
+                .Select(long.Parse).ToList() : new List<long>();
+            return new User(long.Parse(userInfo[1]), userInfo[2], userInfo[3])
+            {
+                Friends = friends
+            };
         }
     }
 
