@@ -4,7 +4,7 @@ using server_console.dataset;
 using Service.dataSetService;
 
 namespace Repository.messageRepository{
-    public class MessageRepository : RepositoryInterface<string, Message>{
+    public class MessageRepository {
         //string = gid, uid, message 
         private DataTable messages;
         public MessageRepository(){
@@ -31,7 +31,6 @@ namespace Repository.messageRepository{
 
         public List<Message> Get(long gid)
         {
-            
            
             var qurry = 
                 from message in messages.AsEnumerable()
@@ -57,16 +56,6 @@ namespace Repository.messageRepository{
             newRow["message"] = item.Msg;
             newRow["datetime"] = item.DateTime;
             messages.Rows.Add(newRow);
-        }
-
-        public void Update(string id, Message item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Message Get(string id)
-        {
-            throw new NotImplementedException();
         }
     }
 }
