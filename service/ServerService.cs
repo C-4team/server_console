@@ -3,14 +3,23 @@ using System.Net.Sockets;
 using System.Text;
 using Model.user;
 using Service.groupService;
+using Service.messageService;
+using Service.userService;
 
 namespace Service.serverService{
     public class ServerService{
         private TcpListener listener;
         private GroupService groupService;
 
+        private MessageService messageService;
+
+        private UserService userService;
+
+
         public ServerService(){
             this.groupService = new GroupService();
+            this.messageService = new MessageService();
+            this.userService = new UserService();
             listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 12000);
             listener.Start();
             acceptRequestDeamon();
@@ -78,7 +87,8 @@ namespace Service.serverService{
 
                     break;
                 case 4:
-                
+                    result = groupService.EnterGroup(user,splitedRequest);
+                    user.Writer.WriteLine(result);
                     break;
                 case 5:
                     result = groupService.CreateGroup(user,splitedRequest);
@@ -95,7 +105,7 @@ namespace Service.serverService{
                     break;
                 
                 case 7:
-                    
+                    messageService.SendMessageToGroup(user, splitedRequest);
                     break;
                 case -1:
 
