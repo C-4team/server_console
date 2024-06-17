@@ -27,7 +27,6 @@ namespace Service.groupService{
         
         public string CreateGroup(User user ,string[] splitedInfo){
 
-            
             List<User> users = [user];
             Group group = new Group(splitedInfo[1],users);
 
