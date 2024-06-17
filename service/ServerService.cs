@@ -105,6 +105,7 @@ namespace Service.serverService{
                                 newUser.NetStream = newClientStream;
                                 newUser.Writer = newClientWriter;
                                 newUser.Reader = newClientStreamReader;
+                                response += "," +newUser.Username;
                                 Console.WriteLine(newUser.ToString());
 
                             }
