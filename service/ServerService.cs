@@ -12,6 +12,7 @@ using Service.dataSetService;
 using Service.groupService;
 using Service.messageService;
 using Service.userService;
+using Service.conversationservice;
 
 namespace Service.serverService{
     public class ServerService{
@@ -145,10 +146,14 @@ namespace Service.serverService{
             switch(reqType){
                 
                 case 2:
-                    
+                    ConversationService conversationService = new ConversationService();
+                    result = conversationService.GetConversationData(user.Id);
+                    user.Writer.WriteLine(result);
                     break;
                 case 3:
-
+                    long friendId = long.Parse(splitedRequest[2]);
+                    result = userService.AddFriend(user.Id, friendId);
+                    user.Writer.WriteLine(result);
                     break;
                 case 4:
                     result = groupService.EnterGroup(user,splitedRequest);
