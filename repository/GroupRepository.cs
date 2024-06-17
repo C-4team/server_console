@@ -43,14 +43,14 @@ namespace Repository.groupRepository{
                 from g in db.Tables["Group"].AsEnumerable()
                 join t in db.Tables["User_in_Group"].AsEnumerable()
                 on (long)g["gid"] equals (long)t["gid"]
-                select t;
+                select new List<DataRow>{g, t};
 
             Group group = null;
             
             foreach(var dt in qurry){
-                User usr = userRepository.Get((long)dt["uid"])!;
+                User usr = userRepository.Get((long)dt[1]["uid"])!;
                 if(group == null){
-                    group = new Group((long)dt["gid"],(string)dt["name"], new List<User>());
+                    group = new Group((long)dt[0]["gid"],(string)dt[0]["name"], new List<User>());
                 }
                 group.AddUser(usr);
             }
@@ -64,11 +64,21 @@ namespace Repository.groupRepository{
             dataRow["name"] = item.GroupName;
             groups.Rows.Add(dataRow);
             groups.AcceptChanges();
+
+            DataTable group_in_user = db.Tables["User_in_Group"];
+            DataRow usrRow = null;
+            foreach(var usr in item.Users){
+                usrRow = group_in_user.NewRow();
+                usrRow["gid"] = item.GroupId;
+                usrRow["uid"] = usr.Id;
+                group_in_user.Rows.Add(usrRow);
+                group_in_user.AcceptChanges();
+            }
          
         }
 
         public void InviteUser(Group group, User user){
-            DataTable group_in_user = db.Tables["Group_in_User"]!;
+            DataTable group_in_user = db.Tables["User_in_Group"]!;
             DataRow dataRow = group_in_user.NewRow();
             dataRow["gid"] = group.GroupId;
             dataRow["uid"] = user.Id;

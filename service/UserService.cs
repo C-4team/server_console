@@ -47,6 +47,13 @@ namespace Service.userService{
             newRow["uid"] = id;
             newRow["fid"] = friendId;
             friendsTable.Rows.Add(newRow);
+            friendsTable.AcceptChanges();
+
+            DataRow newRow2 = friendsTable.NewRow();
+            newRow2["uid"] = friendId;
+            newRow2["fid"] = id;
+            friendsTable.Rows.Add(newRow2);
+            friendsTable.AcceptChanges();
             userRepository.SaveCsv();
             return "7";  // 존재하는 학번인 경우 친구 추가 성공
         }

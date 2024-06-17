@@ -39,10 +39,15 @@ namespace Service.serverService{
             DataTable groupTable = dataBase.Tables["Group"];
             DataTable groupInUser = dataBase.Tables["User_in_Group"];
             User jihoon = new User(2022203078,"강지훈","1234");
-            User seayon = new User(2022203019,"최세연","1234");
+            User heanho = new User(2020203080,"김현호","1234");
+            User imseayon =  new User(2022203085,"임서연","1234");
+            User choiseayon = new User(2022203019,"최세연","1234");
             userService.Register(jihoon);
-            userService.Register(seayon);
-     
+            userService.Register(choiseayon);
+            userService.Register(imseayon);
+            userService.Register(heanho);
+            //userService.AddFriend(2022203078,2022203019);
+            Console.WriteLine(dataBase.GetXml());
             
         }
         public void acceptRequestDeamon(){
@@ -69,7 +74,7 @@ namespace Service.serverService{
                         {
                             User tmp = new User(long.Parse(requestData[1]),requestData[2],requestData[3]);
                             
-
+                            
                             newUser = userService.Register(tmp);
                             if(newUser == null){
                                 response = "0";
@@ -131,15 +136,26 @@ namespace Service.serverService{
             while (user.TCPclient.Connected){
                 string request = user.Reader.ReadLine()!;
                 Console.WriteLine("RequestController : " + request);
-                string[] splitedRequest = request.Split(',');
+                if(request == "-1"){
+                    user.TCPclient.Close();
+                    return Task.CompletedTask;
+                }
+                if(!string.IsNullOrEmpty(request) && !string.IsNullOrWhiteSpace(request)){
+                    string[] splitedRequest = request.Split(',');
                 
-                _ = RequestMatcher(user, splitedRequest);
-                
+                    RequestMatcher(user, splitedRequest);
+                    Console.WriteLine(DataSetService.DB.GetXml());
+
+                }
+                else{
+                    return Task.CompletedTask;
+                }
+                
             }
             return Task.CompletedTask;
 
         }
-        Task RequestMatcher(User user ,string[] splitedRequest){
+        private void RequestMatcher(User user ,string[] splitedRequest){
             int reqType = int.Parse(splitedRequest[0]);
             Console.WriteLine("reqType : " + reqType);
             string result = "";
@@ -178,10 +194,9 @@ namespace Service.serverService{
                     messageService.SendMessageToGroup(user, splitedRequest);
                     break;
                 case -1:
-
+                    
                     break;
             }
-            return Task.CompletedTask;
         }
     }
 }
