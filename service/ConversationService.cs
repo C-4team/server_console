@@ -41,14 +41,22 @@ namespace Service.conversationservice
             var userGroups = GetGroupById(id);
 
             if (userGroups == null || userGroups.Rows.Count == 0)
-                return "4";  // 그룹이 없는 경우  -- 이거 물어보기
+                return "4";  // 그룹이 없는 경우
             
             var groupStrings = userGroups.AsEnumerable().Take(3).Select(row =>
             {
                 var gid = row.Field<long>("gid");
+                var groupName = dataBase.Group.AsEnumerable()
+                    .Where(gr => gr.Field<long>("gid") == gid)
+                    .Select(gr => gr.Field<string>("name"))
+                    .FirstOrDefault();
                 var members = GetGroupMembers(gid).AsEnumerable().Take(4)
-                    .Select(memberRow => memberRow.Field<string>("Username"));
-                return $"{gid},{GetGroupMembers(gid).Rows.Count},{string.Join(",", members)}";
+                    .Select(memberRow => memberRow.Field<string>("username"));
+
+                var messages = GetGroupMessages(gid).AsEnumerable().Take(4)
+                    .Select(messageRow => $"{messageRow.Field<string>("message")}({messageRow.Field<DateTime>("datetime")})");
+                
+                return $"{gid},{groupName},{GetGroupMembers(gid).Rows.Count},{string.Join(",", members)}|{string.Join(",",messages)}";
             });
             
             return $"5,{userGroups.Rows.Count},{string.Join(",", groupStrings)}";
@@ -59,7 +67,7 @@ namespace Service.conversationservice
         {
             var userInGroups = dataBase.User_in_Group;
             var query = from row in userInGroups.AsEnumerable()
-                        where row.Field<long>("Uid") == id
+                        where row.Field<long>("uid") == id
                         select row;
 
             if (query.Any()) return query.CopyToDataTable();
@@ -71,8 +79,28 @@ namespace Service.conversationservice
         {
             var userInGroups = dataBase.User_in_Group;
             var query = from row in userInGroups.AsEnumerable()
-                        where row.Field<long>("Gid") == gid
+                        join user in dataBase.User.AsEnumerable()
+                        on row.Field<long>("uid") equals user.Field<long>("uid")
+                        where row.Field<long>("gid") == gid
+                        select new { Username = user.Field<string>("username")};
+
+            DataTable membersTable = new DataTable();
+            membersTable.Columns.Add("username", typeof(string));
+            foreach (var member in query)
+            {
+                membersTable.Rows.Add(member.Username);
+            }
+            return membersTable;
+        }
+
+        // 그룹 메시지 정보 가져오기
+        private DataTable GetGroupMessages(long gid) {
+            var messages = dataBase.Message;
+            var query = from row in messages.AsEnumerable()
+                        where row.Field<long>("gid") == gid
+                        orderby row.Field<DateTime>("datetime")
                         select row;
+
             if (query.Any()) return query.CopyToDataTable();
             else return new DataTable();
         }
