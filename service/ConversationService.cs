@@ -51,7 +51,7 @@ namespace Service.conversationservice
                     .Select(gr => gr.Field<string>("name"))
                     .FirstOrDefault();
                 var members = GetGroupMembers(gid).AsEnumerable().Take(4)
-                    .Select(memberRow => memberRow.Field<string>("username"));
+                    .Select(memberRow => memberRow.Field<string>("name"));
 
                 var messages = GetGroupMessages(gid).AsEnumerable().Take(4)
                     .Select(messageRow => $"{messageRow.Field<string>("message")}({messageRow.Field<DateTime>("datetime")})");
@@ -82,10 +82,10 @@ namespace Service.conversationservice
                         join user in dataBase.User.AsEnumerable()
                         on row.Field<long>("uid") equals user.Field<long>("uid")
                         where row.Field<long>("gid") == gid
-                        select new { Username = user.Field<string>("username")};
+                        select new { Username = user.Field<string>("name")};
 
             DataTable membersTable = new DataTable();
-            membersTable.Columns.Add("username", typeof(string));
+            membersTable.Columns.Add("name", typeof(string));
             foreach (var member in query)
             {
                 membersTable.Rows.Add(member.Username);

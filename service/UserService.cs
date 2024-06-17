@@ -21,7 +21,7 @@ namespace Service.userService{
                 return null;  // 기존 유저는 회원가입 X
 
             userRepository.Insert(newUser);
-            return existUser;
+            return newUser;
         }
 
         // 로그인
