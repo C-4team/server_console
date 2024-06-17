@@ -1,7 +1,9 @@
+using System.Data;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using Model.user;
 using Repository.userRepository;
+using Service.dataSetService;
 
 namespace Service.userService{
     public class UserService{
@@ -14,8 +16,10 @@ namespace Service.userService{
         // 회원가입
         public User Register(User newUser) {
             var existUser = userRepository.Get(newUser.Id);
+
             if (existUser != null && existUser.Valid == 1)
                 return null;  // 기존 유저는 회원가입 X
+
             userRepository.Insert(newUser);
             return existUser;
         }
@@ -23,6 +27,7 @@ namespace Service.userService{
         // 로그인
         public User Login(long id, string password)
         {
+
             User existUser = userRepository.Get(id);
             return existUser;
         }
@@ -34,10 +39,14 @@ namespace Service.userService{
             var friend = userRepository.Get(friendId);
 
             if (friend == null || user == null 
-                || user.Friends.Contains(friendId)) return "6";  // 존재 X 학번
+                || user.GetFriends().Contains(friendId)) return "6";  // 존재 X 학번
 
-            user.Friends.Add(friendId);
-            userRepository.Update(id, user);
+            var friendsTable = DataSetService.DB.Tables["Friend"];
+            DataRow newRow = friendsTable.NewRow();
+            newRow["uid"] = id;
+            newRow["fid"] = friendId;
+            friendsTable.Rows.Add(newRow);
+            userRepository.SaveCsv();
             return "7";  // 존재하는 학번인 경우 친구 추가 성공
         }
 
@@ -47,8 +56,9 @@ namespace Service.userService{
             var user = userRepository.Get(id);
             if (user == null) return null;
 
+            var friendIds = user.GetFriends();
             var friends = new List<User>();
-            foreach(var friendId in user.Friends)
+            foreach(var friendId in friendIds)
             {
                 var friend = userRepository.Get(friendId);
                 if (friend != null) friends.Add(friend);
@@ -56,14 +66,25 @@ namespace Service.userService{
             return friends;  // 각 친구 마다 ;로 구분
         }
 
-        // 친구 목록을 문자열로 반환
+        // 친구 목록을 문자열로 반환 - 데이터베이스에서 친구 목록 조회
         public string GetFriendsAsString(long id)
         {
-            var friends = GetFriends(id);
-            if (friends == null) return null;
+            DataSet DB = DataSetService.DB;
+            DataTable friendsTable = DB.Tables["Friend"];
+            DataTable usersTable = DB.Tables["User"];
 
-            var friendsString = friends.Select(friend => $"{friend.Id},{friend.Username}");
-            return string.Join(";", friendsString);
+            var friendIds = friendsTable.AsEnumerable()
+                                        .Where(row => (long)row["uid"] == id)
+                                        .Select(row => (long)row["fid"])
+                                        .ToList();
+
+            if (friendIds.Count == 0) return null;
+
+            var friends = usersTable.AsEnumerable()
+                                    .Where(row => friendIds.Contains((long)row["uid"]))
+                                    .Select(row => $"{row["uid"]},{row["name"]}")
+                                    .ToList();
+            return string.Join(";", friends);
         }
 
         // 유저 정보 반환 (친구 목록 제외)
@@ -73,7 +94,7 @@ namespace Service.userService{
             var user= userRepository.Get(id);
             if (user == null) return null;
 
-            return $"{user.Valid},{user.Id},{user.Username},{user.Password}";
+            return $"{user.Id},{user.Username},{user.Password}";
         }
 
         // UserId로 User 객체 반환

@@ -5,18 +5,18 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using server_console.dataset;
+using Service.dataSetService;
+using System.Data;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Model.user{
      public class User{
-        private int valid;  // 로그인/회원가입 확인용
-
         private long id;
 
         private string username;
 
         private string password;
-
-        private List<long> friends;   // 친구 목록
 
         private TcpClient tcpClient;
         
@@ -49,13 +49,6 @@ namespace Model.user{
             this.id = id;
             this.username = username;
             this.password = password;
-            this.friends = new List<long>();   // 친구 목록 초기화
-        }
-
-        public int Valid
-        {
-            get { return valid; }
-            set { valid = value; }
         }
 
         public long Id { 
@@ -71,22 +64,28 @@ namespace Model.user{
             set { password = value; }
         }
 
-        public List<long> Friends {
-            get { return friends; }
-            set { friends = value; }
+        public List<long> GetFriends() {
+            var friends = new List<long>();
+            DataSet DB = DataSetService.DB;
+            DataTable friendsTable = DB.Tables["Friend"];
+            foreach (DataRow row in friendsTable.Rows) {
+                if ((long)row["uid"] == this.id)
+                    friends.Add((long)row["fid"]);
+            }
+            return friends;
         }
       
         // 회원가입/로그인 시 사용되는 문자열 반환
         public string ToLoginString()
         {
-            return $"{valid},{id},{username},{password}";
+            return $"{id},{username},{password}";
         }
 
         // (친구 목록 포함) 전체 정보 반환
         public override string ToString()
         {
-            var friendsStr = string.Join(";", friends);
-            return $"{valid},{id},{username},{password},{friendsStr}";
+            var friendsStr = string.Join(";", GetFriends());
+            return $"{id},{username},{password},{friendsStr}";
         }
 
         // 회원가입/로그인 시 사용되는 문자열 파싱
@@ -99,12 +98,9 @@ namespace Model.user{
         // 친구 목록 포함한 문자열 파싱
         public static User parseUserWithFriends(string bytes) {
             string[] userInfo = bytes.Split(',');
-            var friends = userInfo.Length > 4 ? userInfo[4].Split(';')
-                .Select(long.Parse).ToList() : new List<long>();
-            return new User(long.Parse(userInfo[1]), userInfo[2], userInfo[3])
-            {
-                Friends = friends
-            };
+            var user = new User(long.Parse(userInfo[1]), userInfo[2], userInfo[3]);
+            var frineds = user.GetFriends();
+            return user;
         }
     }
 
