@@ -11,6 +11,7 @@ namespace Repository.groupRepository{
     public class GroupRepository : RepositoryInterface<long, Group>
     {
         private DataBase db;
+        private static int autogid = 0;
         private UserRepository userRepository;
         public GroupRepository(){
             db = DataSetService.DB;
@@ -25,7 +26,7 @@ namespace Repository.groupRepository{
                 from g in db.Tables["Group"].AsEnumerable()
                 join t in db.Tables["User_in_Group"].AsEnumerable()
                 on (long)g["gid"] equals (long)t["gid"]
-                where g["name"].Equals(groupName)
+                where (string)g["name"] == groupName
                 select t;
             Group group = null;
             foreach(var dt in qurry){
@@ -64,12 +65,12 @@ namespace Repository.groupRepository{
             dataRow["name"] = item.GroupName;
             groups.Rows.Add(dataRow);
             groups.AcceptChanges();
-
+            
             DataTable group_in_user = db.Tables["User_in_Group"];
             DataRow usrRow = null;
             foreach(var usr in item.Users){
                 usrRow = group_in_user.NewRow();
-                usrRow["gid"] = item.GroupId;
+                usrRow["gid"] = autogid++;
                 usrRow["uid"] = usr.Id;
                 group_in_user.Rows.Add(usrRow);
                 group_in_user.AcceptChanges();
