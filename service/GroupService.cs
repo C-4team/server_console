@@ -28,8 +28,9 @@ namespace Service.groupService{
         public string CreateGroup(User user ,string[] splitedInfo){
 
             
-            List<User> users =  [user];
+            List<User> users = [user];
             Group group = new Group(splitedInfo[1],users);
+
             groupRepository.Insert(group);
             return "9";
 
@@ -38,6 +39,12 @@ namespace Service.groupService{
            
             User invitedUser = userRepository.Get(long.Parse(splitedInfo[2]));
             Group group = groupRepository.Get(long.Parse(splitedInfo[1]));
+            if(group == null){
+                Console.WriteLine("Group null");
+            }
+            if(invitedUser == null){
+                Console.WriteLine("User null");
+            }
             groupRepository.InviteUser(group,invitedUser);
             return "10";
         }

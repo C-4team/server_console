@@ -20,7 +20,14 @@ namespace Service.messageService{
 
         }
         public void EnterNewUser(long gid, User user){
-            avaliableUserInGroup[gid].Add(user);
+            Group group = groupRepository.Get(gid);
+            if(group != null && !avaliableUserInGroup.ContainsKey(group.GroupId)){
+                avaliableUserInGroup.Add(gid, [user]);
+                
+            }
+            else if(group != null && avaliableUserInGroup.ContainsKey(group.GroupId)){
+                avaliableUserInGroup[gid].Add(user);
+            }
         }
         public string ShowBeforeMessages(User user, string[] splitedInfo){
             List<Message> messages = messageRepository.Get(long.Parse(splitedInfo[1]));
