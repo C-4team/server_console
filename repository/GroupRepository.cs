@@ -45,6 +45,7 @@ namespace Repository.groupRepository{
                 from g in db.Tables["Group"].AsEnumerable()
                 join t in db.Tables["User_in_Group"].AsEnumerable()
                 on (long)g["gid"] equals (long)t["gid"]
+                where (long)g["gid"] == id
                 select new List<DataRow>{g, t};
 
             Group group = null;
@@ -108,14 +109,6 @@ namespace Repository.groupRepository{
                 }
                 
             }
-            /*List<Group> groupList = new List<Group>();
-            foreach(var gs in avaliableGroups.AsEnumerable()){
-                groupList.Add(gs.Value);
-            }
-            foreach(var gl in groupList){
-                gl.Users.DistinctBy((user) => user.Id );
-            }
-            return groupList;*/
             return avaliableGroups.Values.ToList();
         }
 
