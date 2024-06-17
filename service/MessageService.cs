@@ -10,22 +10,27 @@ namespace Service.messageService{
         private MessageRepository messageRepository;
         private GroupRepository groupRepository;
         private UserRepository userRepository;
-        private Dictionary<long,List<User>> avaliableUserInGroup;
+        private static Dictionary<long,List<User>> avaliableUserInGroup = new Dictionary<long, List<User>>();
 
+        
         public MessageService(){
             this.messageRepository = new MessageRepository();
             this.groupRepository = new GroupRepository();
             this.userRepository = new UserRepository();
-            this.avaliableUserInGroup = new Dictionary<long, List<User>>();
 
         }
+    
         public void EnterNewUser(long gid, User user){
             Group group = groupRepository.Get(gid);
-            if(group != null && !avaliableUserInGroup.ContainsKey(group.GroupId)){
+            if(!avaliableUserInGroup.ContainsKey(group.GroupId)){
                 avaliableUserInGroup.Add(gid, [user]);
-                
+                Console.WriteLine("(" +gid + ")"+ "내부 사람 ");
+                foreach(var usr in avaliableUserInGroup[gid]){
+                    Console.WriteLine(usr.ToLoginString());
+                }
+                Console.WriteLine("끝");
             }
-            else if(group != null && avaliableUserInGroup.ContainsKey(group.GroupId)){
+            else{
                 avaliableUserInGroup[gid].Add(user);
             }
         }
@@ -48,7 +53,7 @@ namespace Service.messageService{
             Group group = groupRepository.Get(long.Parse(splitedInfo[1]));
             messageRepository.Insert(new Message(long.Parse(splitedInfo[1]),user.Id,splitedInfo[2],DateTime.Parse(splitedInfo[3])));
             string sendToAllUser = "11," + group.GroupId.ToString() + "," + user.Username + "," + splitedInfo[2] + "," + splitedInfo[3];
-            foreach(var usr in avaliableUserInGroup[group.GroupId]){
+            foreach(var usr in avaliableUserInGroup[long.Parse(splitedInfo[1])]){
                 usr.Writer.WriteLine(sendToAllUser);
             }
             return "";
