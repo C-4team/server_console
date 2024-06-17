@@ -5,30 +5,26 @@ using Repository.userRepository;
 
 namespace Service.userService{
     public class UserService{
-        UserRepository userRepository;
+        private UserRepository userRepository;
 
         public UserService(){
             userRepository = new UserRepository();   
         }
         
         // 회원가입
-        public string Register(User newUser) {
+        public User Register(User newUser) {
             var existUser = userRepository.Get(newUser.Id);
             if (existUser != null && existUser.Valid == 1)
-                return "0";  // 기존 유저는 회원가입 X
-            newUser.Valid = 1;   // 신규유저 -> 기존유저
+                return null;  // 기존 유저는 회원가입 X
             userRepository.Insert(newUser);
-            return "1";
+            return existUser;
         }
 
         // 로그인
-        public string Login(long id, string password)
+        public User Login(long id, string password)
         {
-            var existUser = userRepository.Get(id);
-            if (existUser != null && existUser.Valid == 1
-                && existUser.Password == password)
-                return "3";  // 로그인 성공
-            else return "2";  // 로그인 실패
+            User existUser = userRepository.Get(id);
+            return existUser;
         }
 
         // 친구추가 (친구 검색)

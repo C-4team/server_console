@@ -56,6 +56,7 @@ namespace Repository.messageRepository{
             newRow["message"] = item.Msg;
             newRow["datetime"] = item.DateTime;
             messages.Rows.Add(newRow);
+            messages.AcceptChanges();
         }
     }
 }

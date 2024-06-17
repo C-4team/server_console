@@ -13,8 +13,7 @@ namespace Repository.userRepository{
             users = DB.Tables["User"]!;
         }
 
-        public void Delete(long id)
-    {
+        public void Delete(long id){
         var query =
             from user in users.AsEnumerable()
             where (long)user["uid"] == id
@@ -28,8 +27,8 @@ namespace Repository.userRepository{
         SaveCsv();
     }
        
-        public User Get(long id)
-        {
+        public User Get(long id){
+
             var query = 
                 from user in users.AsEnumerable()
                 where (long)user["uid"] == id
@@ -48,17 +47,14 @@ namespace Repository.userRepository{
     public void Insert(User item)
     {
         DataRow dataRow = users.NewRow();
-        dataRow["valid"] = item.Valid;
         dataRow["uid"] = item.Id;
         dataRow["name"]= item.Username;
         dataRow["password"] = item.Password;
-        dataRow["friends"] = string.Join(";", item.Friends);
         users.Rows.Add(dataRow);
         users.AcceptChanges();
     }
 
-    public void Update(long id, User item)
-    {
+    public void Update(long id, User item){
         var query = 
             from user in users.AsEnumerable()
             where (long)user["uid"] == id
@@ -66,18 +62,16 @@ namespace Repository.userRepository{
 
         foreach(var dr in query)
         {
-            dr["valid"] = item.Valid;
             dr["name"] = item.Username;
             dr["password"] = item.Password;
-            dr["friends"] = string.Join(";", item.Friends);
         }
 
         SaveCsv();
     }
 
     private void SaveCsv() {
-        using (var writer = new StreamWriter(fileName,false))
-        {
+        using (var writer = new StreamWriter(fileName,false)){
+
             writer.WriteLine(string.Join(",", users.Columns.Cast<DataColumn>().Select(c => c.ColumnName)));
 
             foreach(DataRow row in users.Rows)

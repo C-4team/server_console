@@ -6,6 +6,7 @@ using Model.user;
 using Repository.userRepository;
 using server_console.dataset;
 using Service.dataSetService;
+
 namespace Repository.groupRepository{
     public class GroupRepository : RepositoryInterface<long, Group>
     {
@@ -62,6 +63,7 @@ namespace Repository.groupRepository{
             DataRow dataRow = groups.NewRow();
             dataRow["name"] = item.GroupName;
             groups.Rows.Add(dataRow);
+            groups.AcceptChanges();
          
         }
 
@@ -71,6 +73,7 @@ namespace Repository.groupRepository{
             dataRow["gid"] = group.GroupId;
             dataRow["uid"] = user.Id;
             group_in_user.Rows.Add(dataRow);
+            group_in_user.AcceptChanges();
             
         }
         public void Update(long id, Group item)

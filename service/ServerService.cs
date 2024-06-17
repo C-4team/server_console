@@ -17,13 +17,10 @@ namespace Service.serverService{
     public class ServerService{
         private TcpListener listener;
         private GroupService groupService;
-
         private MessageService messageService;
-
         private UserService userService;
 
         private GroupRepository groupRepository;
-
         public ServerService(){
             this.groupService = new GroupService();
             this.messageService = new MessageService();
@@ -31,6 +28,7 @@ namespace Service.serverService{
             this.groupRepository = new GroupRepository();
             listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 12000);
             listener.Start();
+            dummyDataInitalization();
             acceptRequestDeamon();
 
         }
@@ -80,35 +78,52 @@ namespace Service.serverService{
                     case 0 :  // 회원가입
                         if (requestData.Length == 4)
                         {
-                            newUser.Id = long.Parse(requestData[1]);
-                            newUser.Username = requestData[2];
-                            newUser.Password = requestData[3];
+                            User tmp = new User(long.Parse(requestData[1]),requestData[2],requestData[3]);
+                            
 
-                            response = userService.Register(newUser);
+                            newUser = userService.Register(tmp);
+                            if(newUser == null){
+                                response = "0";
+                            }
+                            else{
+                                response = "1";
+                                newUser.TCPclient = newClient;
+                                newUser.NetStream = newClientStream;
+                                newUser.Writer = newClientWriter;
+                                newUser.Reader = newClientStreamReader;
+                                Console.WriteLine(newUser.ToString());
+
+                            }
                         }
-                        else {
-                            response = "형식에 맞지 않는 요청입니다.";
-                        }
+                        
                         break;
                     case 1:  // 로그인
                         if (requestData.Length == 3) {
                             long id = long.Parse(requestData[1]);
                             string password = requestData[2];
-                            response = userService.Login(id, password);
+                            newUser = userService.Login(id, password);
+                            if(newUser == null){
+                                response = "2";
+                            }
+                            else{
+                                response = "3";
+                                newUser.TCPclient = newClient;
+                                newUser.NetStream = newClientStream;
+                                newUser.Writer = newClientWriter;
+                                newUser.Reader = newClientStreamReader;
+                                Console.WriteLine(newUser.ToString());
+
+                            }
                         }
-                        else {
-                            response = "Login 형식과 불일치하는 request입니다.";
-                        }
+                        
                         break;
-                    default :
-                        response = "잘못된 request type입니다.";
-                        break;
+                    
                 }
 
                 newClientWriter.WriteLine(response);
 
-                if (requestType == 1 && response == "3")
-                    _ = RequestController(newUser);
+                
+                _ = RequestController(newUser);
                 /*
                 newClientWriter.AutoFlush = true;
                 Console.WriteLine(userInfo);
@@ -126,6 +141,7 @@ namespace Service.serverService{
         Task RequestController(User user){
             while (user.TCPclient.Connected){
                 string request = user.Reader.ReadLine()!;
+                Console.WriteLine("RequestController : " + request);
                 string[] splitedRequest = request.Split(',');
                 
                 _ = RequestMatcher(user, splitedRequest);
@@ -136,6 +152,7 @@ namespace Service.serverService{
         }
         Task RequestMatcher(User user ,string[] splitedRequest){
             int reqType = int.Parse(splitedRequest[0]);
+            Console.WriteLine("reqType : " + reqType);
             string result = "";
             switch(reqType){
                 
@@ -150,6 +167,7 @@ namespace Service.serverService{
                     user.Writer.WriteLine(result);
                     break;
                 case 5:
+                    Console.WriteLine("그룹 생성 요청");
                     result = groupService.CreateGroup(user,splitedRequest);
 
                     user.Writer.WriteLine(result);
