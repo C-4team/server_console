@@ -26,6 +26,7 @@ namespace Service.serverService{
 
         }
         public void acceptRequestDeamon(){
+            UserService userService = new UserService();
 
             while (true){
                 TcpClient newClient = listener.AcceptTcpClient();
@@ -33,7 +34,54 @@ namespace Service.serverService{
                 StreamWriter newClientWriter = new StreamWriter(newClientStream,Encoding.UTF8){AutoFlush = true};
                 StreamReader newClientStreamReader = new StreamReader(newClientStream,Encoding.UTF8);
                 string userInfo = newClientStreamReader.ReadLine()!;
-                
+                Console.WriteLine(userInfo);
+
+                User newUser = User.parseUser(userInfo!);
+                newUser.TCPclient = newClient;
+                newUser.NetStream = newClientStream;
+                newUser.Writer = newClientWriter;
+                newUser.Reader = newClientStreamReader;
+
+                Console.WriteLine(newUser.ToString());
+
+                string[] requestData = userInfo.Split(',');
+                int requestType = int.Parse(requestData[0]);
+                string response = string.Empty;
+
+                switch (requestType) {
+                    case 0 :  // 회원가입
+                        if (requestData.Length == 4)
+                        {
+                            newUser.Id = long.Parse(requestData[1]);
+                            newUser.Username = requestData[2];
+                            newUser.Password = requestData[3];
+
+                            response = userService.Register(newUser);
+                        }
+                        else {
+                            response = "형식에 맞지 않는 요청입니다.";
+                        }
+                        break;
+                    case 1:  // 로그인
+                        if (requestData.Length == 3) {
+                            long id = long.Parse(requestData[1]);
+                            string password = requestData[2];
+                            response = userService.Login(id, password);
+                        }
+                        else {
+                            response = "Login 형식과 불일치하는 request입니다.";
+                        }
+                        break;
+                    default :
+                        response = "잘못된 request type입니다.";
+                        break;
+                }
+
+                newClientWriter.WriteLine(response);
+
+                if (requestType == 1 && response == "3")
+                    _ = RequestController(newUser);
+                /*
                 newClientWriter.AutoFlush = true;
                 Console.WriteLine(userInfo);
                 User newUser = User.parseUser(userInfo!);
@@ -43,8 +91,7 @@ namespace Service.serverService{
                 newUser.Reader = newClientStreamReader;
 
                 Console.WriteLine(newUser.ToString());
-
-                _ = RequestController(newUser);
+                */
             }
         }
 
