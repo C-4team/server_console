@@ -121,8 +121,12 @@ namespace Service.serverService{
 
                 newClientWriter.WriteLine(response);
                 
-                if(newUser!= null)
-                _ = RequestController(newUser);
+                if(newUser!= null){
+                    Thread ts = new Thread(() => RequestController(newUser));
+                    ts.Start();
+                    continue;
+                }
+            
                 /*
                 newClientWriter.AutoFlush = true;
                 Console.WriteLine(userInfo);
@@ -137,12 +141,12 @@ namespace Service.serverService{
             }
         }
 
-        Task RequestController(User user){
+        void RequestController(User user){
             while (user.TCPclient.Connected){
                 string request = user.Reader.ReadLine()!;
                 if(request == "-1"){
                     user.TCPclient.Close();
-                    return Task.CompletedTask;
+                    return;
                 }
                 if(!string.IsNullOrEmpty(request) && !string.IsNullOrWhiteSpace(request)){
                     Console.WriteLine("RequestController : " + request);
@@ -155,11 +159,9 @@ namespace Service.serverService{
                 }
                 else{
                     Console.WriteLine("Null");
-                    return Task.CompletedTask;
                 }
                 
             }
-            return Task.CompletedTask;
 
         }
         private void RequestMatcher(User user ,string[] splitedRequest){

@@ -53,7 +53,14 @@ namespace Repository.groupRepository{
                 if(group == null){
                     group = new Group((long)dt[0]["gid"],(string)dt[0]["name"], new List<User>());
                 }
-                group.AddUser(usr);
+                bool cond = false;
+                foreach(var ur in group.Users){
+                    if(ur.Id == usr.Id){
+                        cond = true;
+                    }
+                }
+                if(!cond)
+                    group.AddUser(usr);
             }
             return group;
         }
@@ -107,6 +114,7 @@ namespace Repository.groupRepository{
             foreach(var gl in groupList){
                 gl.Users.DistinctBy((user) => user.Id );
             }
+            groupList.DistinctBy((gs) => gs.GroupId);
             return groupList;
 
         }
