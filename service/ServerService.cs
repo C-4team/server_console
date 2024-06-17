@@ -68,7 +68,7 @@ namespace Service.serverService{
                         {
                             User tmp = new User(long.Parse(requestData[1]),requestData[2],requestData[3]);
                             
-
+                            
                             newUser = userService.Register(tmp);
                             if(newUser == null){
                                 response = "0";
