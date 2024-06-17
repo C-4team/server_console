@@ -151,7 +151,7 @@ namespace Service.serverService{
                     user.Writer.WriteLine(result);
                     break;
                 case 3:
-                    long friendId = long.Parse(splitedRequest[2]);
+                    long friendId = long.Parse(splitedRequest[1]);
                     result = userService.AddFriend(user.Id, friendId);
                     user.Writer.WriteLine(result);
                     break;

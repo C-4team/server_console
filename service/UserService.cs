@@ -27,8 +27,9 @@ namespace Service.userService{
         // 로그인
         public User Login(long id, string password)
         {
-
             User existUser = userRepository.Get(id);
+            if (existUser == null || existUser.Password != password)
+                return null;  // 존재하지 않거나 비밀번호가 틀림
             return existUser;
         }
 
