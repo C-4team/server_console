@@ -54,6 +54,7 @@ namespace Repository.userRepository{
         dataRow["password"] = item.Password;
         dataRow["friends"] = string.Join(";", item.Friends);
         users.Rows.Add(dataRow);
+        users.AcceptChanges();
     }
 
     public void Update(long id, User item)

@@ -19,6 +19,24 @@ namespace Repository.groupRepository{
         {
             throw new NotImplementedException();
         }
+        public Group GetGroupByName(string groupName){
+            var qurry = 
+                from g in db.Tables["Group"].AsEnumerable()
+                join t in db.Tables["User_in_Group"].AsEnumerable()
+                on (long)g["gid"] equals (long)t["gid"]
+                where g["name"].Equals(groupName)
+                select t;
+            Group group = null;
+            foreach(var dt in qurry){
+                User usr = userRepository.Get((long)dt["uid"])!;
+                if(group == null){
+                    group = new Group((long)dt["gid"],(string)dt["name"], new List<User>());
+                }
+                group.AddUser(usr);
+            }
+            return group;
+
+        }
         public Group Get(long id){
             var qurry = 
                 from g in db.Tables["Group"].AsEnumerable()
