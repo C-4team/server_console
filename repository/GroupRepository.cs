@@ -1,5 +1,6 @@
 using System.Data;
 using System.Net.Http.Headers;
+using System.Runtime.CompilerServices;
 using System.Security.Principal;
 using Model.group;
 using Model.user;
@@ -44,6 +45,7 @@ namespace Repository.groupRepository{
                 from g in db.Tables["Group"].AsEnumerable()
                 join t in db.Tables["User_in_Group"].AsEnumerable()
                 on (long)g["gid"] equals (long)t["gid"]
+                where (long)g["gid"] == id
                 select new List<DataRow>{g, t};
 
             Group group = null;
@@ -53,13 +55,7 @@ namespace Repository.groupRepository{
                 if(group == null){
                     group = new Group((long)dt[0]["gid"],(string)dt[0]["name"], new List<User>());
                 }
-                bool cond = false;
-                foreach(var ur in group.Users){
-                    if(ur.Id == usr.Id){
-                        cond = true;
-                    }
-                }
-                if(!cond)
+                if(!group.Users.Any(u => u.Id == usr.Id))
                     group.AddUser(usr);
             }
             return group;
@@ -84,6 +80,7 @@ namespace Repository.groupRepository{
             }
          
         }
+
         public List<Group> GetGroupsByUser(User user){
             DataTable group_in_user = db.Tables["User_in_Group"]!;
             var qurry = 
@@ -93,11 +90,16 @@ namespace Repository.groupRepository{
             Dictionary<long, Group> avaliableGroups = new Dictionary<long, Group>();
             int count = 0;
             foreach(var g in qurry){
-                if(avaliableGroups.ContainsKey((long)g["gid"])){
-                    avaliableGroups[(long)g["gid"]].AddUser(userRepository.Get((long)g["uid"]));   
+                long groupId = (long)g["gid"];
+                long userId = (long)g["uid"];
+                if(avaliableGroups.ContainsKey(groupId)){
+                    User groupUser = userRepository.Get(userId);
+                    // 중복 사용자 체크 후 추가
+                    if (!avaliableGroups[groupId].Users.Any(u => u.Id == userId))
+                        avaliableGroups[groupId].AddUser(groupUser);   
                 }
                 else{
-                    if(count == 3){
+                    if(count >= 3){
                         continue;
                     }
                     else{
@@ -107,16 +109,7 @@ namespace Repository.groupRepository{
                 }
                 
             }
-            List<Group> groupList = new List<Group>();
-            foreach(var gs in avaliableGroups.AsEnumerable()){
-                groupList.Add(gs.Value);
-            }
-            foreach(var gl in groupList){
-                gl.Users.DistinctBy((user) => user.Id );
-            }
-            groupList.DistinctBy((gs) => gs.GroupId);
-            return groupList;
-
+            return avaliableGroups.Values.ToList();
         }
 
         public void InviteUser(Group group, User user){

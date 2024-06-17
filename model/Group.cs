@@ -17,6 +17,7 @@ namespace Model.group
         public Group(long groupId, string groupName , List<User> users)
         {
             this.groupId = groupId;
+            this.groupName = groupName;
             this.users = users;
 
         }
