@@ -76,6 +76,39 @@ namespace Repository.groupRepository{
             }
          
         }
+        public List<Group> GetGroupsByUser(User user){
+            DataTable group_in_user = db.Tables["User_in_Group"]!;
+            var qurry = 
+                from groups in group_in_user.AsEnumerable()
+                where (long)groups["uid"] == user.Id
+                select groups;
+            Dictionary<long, Group> avaliableGroups = new Dictionary<long, Group>();
+            int count = 0;
+            foreach(var g in qurry){
+                if(avaliableGroups.ContainsKey((long)g["gid"])){
+                    avaliableGroups[(long)g["gid"]].AddUser(userRepository.Get((long)g["uid"]));   
+                }
+                else{
+                    if(count == 3){
+                        continue;
+                    }
+                    else{
+                        count++;
+                        avaliableGroups.Add((long)g["gid"],this.Get((long)g["gid"]));
+                    }
+                }
+                
+            }
+            List<Group> groupList = new List<Group>();
+            foreach(var gs in avaliableGroups.AsEnumerable()){
+                groupList.Add(gs.Value);
+            }
+            foreach(var gl in groupList){
+                gl.Users.DistinctBy((user) => user.Id );
+            }
+            return groupList;
+
+        }
 
         public void InviteUser(Group group, User user){
             DataTable group_in_user = db.Tables["User_in_Group"]!;

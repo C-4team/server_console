@@ -21,12 +21,14 @@ namespace Service.serverService{
         private MessageService messageService;
         private UserService userService;
 
+        private  ConversationService conversationService;
         private GroupRepository groupRepository;
         public ServerService(){
             this.groupService = new GroupService();
             this.messageService = new MessageService();
             this.userService = new UserService();
             this.groupRepository = new GroupRepository();
+            this.conversationService = new ConversationService();
             listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 12000);
             listener.Start();
             dummyDataInitalization();
@@ -46,6 +48,8 @@ namespace Service.serverService{
             userService.Register(choiseayon);
             userService.Register(imseayon);
             userService.Register(heanho);
+            groupService.CreateGroup(jihoon,["5","응소실 4조"]);
+            groupService.InviteUserInGroup(["6","0","2020203080"]);
             //userService.AddFriend(2022203078,2022203019);
             Console.WriteLine(dataBase.GetXml());
             
@@ -136,12 +140,13 @@ namespace Service.serverService{
         Task RequestController(User user){
             while (user.TCPclient.Connected){
                 string request = user.Reader.ReadLine()!;
-                Console.WriteLine("RequestController : " + request);
                 if(request == "-1"){
                     user.TCPclient.Close();
                     return Task.CompletedTask;
                 }
                 if(!string.IsNullOrEmpty(request) && !string.IsNullOrWhiteSpace(request)){
+                    Console.WriteLine("RequestController : " + request);
+
                     string[] splitedRequest = request.Split(',');
                 
                     RequestMatcher(user, splitedRequest);
@@ -149,6 +154,7 @@ namespace Service.serverService{
 
                 }
                 else{
+                    Console.WriteLine("Null");
                     return Task.CompletedTask;
                 }
                 
@@ -163,8 +169,7 @@ namespace Service.serverService{
             switch(reqType){
                 
                 case 2:
-                    ConversationService conversationService = new ConversationService();
-                    result = conversationService.GetConversationData(user.Id);
+                    result = conversationService.GetConversationData(user);
                     user.Writer.WriteLine(result);
                     break;
                 case 3:

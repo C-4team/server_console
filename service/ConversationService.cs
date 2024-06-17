@@ -7,6 +7,9 @@ using System.Net.Sockets;
 using server_console.dataset;
 using Service.dataSetService;
 using System.Data;
+using Model.group;
+using Repository.groupRepository;
+using Repository.userRepository;
 
 namespace Service.conversationservice
 {
@@ -15,66 +18,47 @@ namespace Service.conversationservice
         private UserService userService;
         private GroupService groupService;
         private DataBase dataBase;
+        private GroupRepository groupRepository;
+        private UserRepository userRepository;
 
         public ConversationService()
         {
             userService = new UserService();
             groupService = new GroupService();
+            groupRepository = new GroupRepository();
+            userRepository = new UserRepository();
             dataBase = DataSetService.DB;
         }
 
         // 사용자의 친구목록, 그룹 정보 문자열로 반환
-        public string GetConversationData(long id)
-        {
-            var friends = userService.GetFriendsAsString(id);
-            var groups = GetGroupAsString(id);
-
-            // 친구 목록이나 대화창 없는 경우
-            if (string.IsNullOrEmpty(friends) && string.IsNullOrEmpty(groups)) return "4";
-
-            return $"{groups},{friends}";
+        public string GetConversationData(User user){
+            List<Group> groups = groupRepository.GetGroupsByUser(user);
+            List<User> friends = userService.GetFriends(user.Id);
+            string result = "5,";
+            result += groups.Count.ToString();
+            result += ",";
+            foreach(var g in groups){
+                result += g.GroupId;
+                result += ",";
+                result += g.GroupName;
+                result += ",";
+                result += g.Users.Count.ToString();
+                result += ",";
+                foreach(var u in g.Users){
+                    result += u.Username;
+                    result += ","; 
+                }
+            }
+            result += friends.Count;
+            result += ",";
+            foreach(var f in friends){
+                result += f.Id;
+                result += ",";
+                result += f.Username;
+                result += ",";
+            }
+            return result;
         }
-
-        // 그룹 대화 정보 문자열로 가져오기
-        private string GetGroupAsString(long id)
-        {
-            var userGroups = GetGroupById(id);
-
-            if (userGroups == null || userGroups.Rows.Count == 0)
-                return "4";  // 그룹이 없는 경우
-            
-            var groupStrings = userGroups.AsEnumerable().Take(3).Select(row =>
-            {
-                var gid = row.Field<long>("gid");
-                var groupName = dataBase.Group.AsEnumerable()
-                    .Where(gr => gr.Field<long>("gid") == gid)
-                    .Select(gr => gr.Field<string>("name"))
-                    .FirstOrDefault();
-                var members = GetGroupMembers(gid).AsEnumerable().Take(4)
-                    .Select(memberRow => memberRow.Field<string>("name"));
-
-                var messages = GetGroupMessages(gid).AsEnumerable().Take(4)
-                    .Select(messageRow => $"{messageRow.Field<string>("message")}({messageRow.Field<DateTime>("datetime")})");
-                
-                return $"{gid},{groupName},{GetGroupMembers(gid).Rows.Count},{string.Join(",", members)}|{string.Join(",",messages)}";
-            });
-            
-            return $"5,{userGroups.Rows.Count},{string.Join(",", groupStrings)}";
-        }
-
-        // 그룹 정보 가져오기
-        private DataTable GetGroupById(long id)
-        {
-            var userInGroups = dataBase.User_in_Group;
-            var query = from row in userInGroups.AsEnumerable()
-                        where row.Field<long>("uid") == id
-                        select row;
-
-            if (query.Any()) return query.CopyToDataTable();
-            else return new DataTable();
-        }
-
-        // 그룹 멤버 정보 가져오기
         private DataTable GetGroupMembers(long gid)
         {
             var userInGroups = dataBase.User_in_Group;

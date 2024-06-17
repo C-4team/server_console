@@ -39,19 +39,20 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="User_in_Group" msprop:Generator_RowEvHandlerName="User_in_GroupRowChangeEventHandler" msprop:Generator_RowDeletedName="User_in_GroupRowDeleted" msprop:Generator_RowDeletingName="User_in_GroupRowDeleting" msprop:Generator_RowEvArgName="User_in_GroupRowChangeEvent" msprop:Generator_TablePropName="User_in_Group" msprop:Generator_RowChangedName="User_in_GroupRowChanged" msprop:Generator_UserTableName="User_in_Group" msprop:Generator_RowChangingName="User_in_GroupRowChanging" msprop:Generator_RowClassName="User_in_GroupRow" msprop:Generator_TableClassName="User_in_GroupDataTable" msprop:Generator_TableVarName="tableUser_in_Group">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="uid" msprop:Generator_ColumnPropNameInTable="uidColumn" msprop:Generator_ColumnPropNameInRow="uid" msprop:Generator_UserColumnName="uid" msprop:Generator_ColumnVarNameInTable="columnuid" type="xs:long" minOccurs="0" />
-              <xs:element name="gid" msdata:AutoIncrement="true" msprop:Generator_ColumnPropNameInTable="gidColumn" msprop:Generator_ColumnPropNameInRow="gid" msprop:Generator_UserColumnName="gid" msprop:Generator_ColumnVarNameInTable="columngid" type="xs:long" minOccurs="0" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
         <xs:element name="Friend" msprop:Generator_RowEvHandlerName="FriendRowChangeEventHandler" msprop:Generator_RowDeletedName="FriendRowDeleted" msprop:Generator_RowDeletingName="FriendRowDeleting" msprop:Generator_RowEvArgName="FriendRowChangeEvent" msprop:Generator_TablePropName="Friend" msprop:Generator_RowChangedName="FriendRowChanged" msprop:Generator_RowChangingName="FriendRowChanging" msprop:Generator_TableClassName="FriendDataTable" msprop:Generator_RowClassName="FriendRow" msprop:Generator_TableVarName="tableFriend" msprop:Generator_UserTableName="Friend">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="uid" msprop:Generator_ColumnPropNameInRow="uid" msprop:Generator_ColumnPropNameInTable="uidColumn" msprop:Generator_ColumnVarNameInTable="columnuid" msprop:Generator_UserColumnName="uid" type="xs:long" minOccurs="0" />
               <xs:element name="fid" msprop:Generator_ColumnPropNameInRow="fid" msprop:Generator_ColumnPropNameInTable="fidColumn" msprop:Generator_ColumnVarNameInTable="columnfid" msprop:Generator_UserColumnName="fid" type="xs:long" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="User_in_Group" msprop:Generator_RowEvHandlerName="User_in_GroupRowChangeEventHandler" msprop:Generator_RowDeletedName="User_in_GroupRowDeleted" msprop:Generator_RowDeletingName="User_in_GroupRowDeleting" msprop:Generator_RowEvArgName="User_in_GroupRowChangeEvent" msprop:Generator_TablePropName="User_in_Group" msprop:Generator_RowChangedName="User_in_GroupRowChanged" msprop:Generator_RowChangingName="User_in_GroupRowChanging" msprop:Generator_TableClassName="User_in_GroupDataTable" msprop:Generator_RowClassName="User_in_GroupRow" msprop:Generator_TableVarName="tableUser_in_Group" msprop:Generator_UserTableName="User_in_Group">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="uid" msprop:Generator_ColumnPropNameInRow="uid" msprop:Generator_ColumnPropNameInTable="uidColumn" msprop:Generator_ColumnVarNameInTable="columnuid" msprop:Generator_UserColumnName="uid" type="xs:long" minOccurs="0" />
+              <xs:element name="gid" msprop:Generator_ColumnPropNameInRow="gid" msprop:Generator_ColumnPropNameInTable="gidColumn" msprop:Generator_ColumnVarNameInTable="columngid" msprop:Generator_UserColumnName="gid" type="xs:long" minOccurs="0" />
+              <xs:element name="autokey" msdata:AutoIncrement="true" msprop:Generator_ColumnPropNameInRow="autokey" msprop:Generator_ColumnPropNameInTable="autokeyColumn" msprop:Generator_ColumnVarNameInTable="columnautokey" msprop:Generator_UserColumnName="autokey" type="xs:long" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -70,11 +71,6 @@
       <xs:field xpath="mstns:gid" />
       <xs:field xpath="mstns:uid" />
       <xs:field xpath="mstns:message" />
-    </xs:unique>
-    <xs:unique name="User_in_GroupKey1">
-      <xs:selector xpath=".//mstns:User_in_Group" />
-      <xs:field xpath="mstns:uid" />
-      <xs:field xpath="mstns:gid" />
     </xs:unique>
     <xs:unique name="FriendKey1">
       <xs:selector xpath=".//mstns:Friend" />
