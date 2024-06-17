@@ -42,7 +42,7 @@ namespace Service.conversationservice
 
             if (userGroups == null || userGroups.Rows.Count == 0)
                 return "4";  // 그룹이 없는 경우  -- 이거 물어보기
-
+            
             var groupStrings = userGroups.AsEnumerable().Take(3).Select(row =>
             {
                 var gid = row.Field<long>("gid");
@@ -50,7 +50,7 @@ namespace Service.conversationservice
                     .Select(memberRow => memberRow.Field<string>("Username"));
                 return $"{gid},{GetGroupMembers(gid).Rows.Count},{string.Join(",", members)}";
             });
-
+            
             return $"5,{userGroups.Rows.Count},{string.Join(",", groupStrings)}";
         }
 
