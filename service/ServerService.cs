@@ -41,14 +41,7 @@ namespace Service.serverService{
             User seayon = new User(2022203019,"최세연","1234");
             userService.Register(jihoon);
             userService.Register(seayon);
-            DataRow groupRow = groupTable.NewRow();
-            groupRow["name"] = "응소실 팀플";
-            groupTable.Rows.Add(groupRow);
-            Model.group.Group group = groupRepository.GetGroupByName("응소실 팀플");
-            DataRow groupInUserRow = groupInUser.NewRow();
-            groupInUserRow["gid"] = group.GroupId;
-            groupInUserRow["uid"] = jihoon.Id;
-            groupInUser.Rows.Add(groupInUserRow);
+     
             
         }
         public void acceptRequestDeamon(){
@@ -62,13 +55,8 @@ namespace Service.serverService{
                 string userInfo = newClientStreamReader.ReadLine()!;
                 Console.WriteLine(userInfo);
 
-                User newUser = User.parseUser(userInfo!);
-                newUser.TCPclient = newClient;
-                newUser.NetStream = newClientStream;
-                newUser.Writer = newClientWriter;
-                newUser.Reader = newClientStreamReader;
-
-                Console.WriteLine(newUser.ToString());
+                User newUser = null;
+                
 
                 string[] requestData = userInfo.Split(',');
                 int requestType = int.Parse(requestData[0]);
@@ -121,8 +109,8 @@ namespace Service.serverService{
                 }
 
                 newClientWriter.WriteLine(response);
-
                 
+                if(newUser!= null)
                 _ = RequestController(newUser);
                 /*
                 newClientWriter.AutoFlush = true;

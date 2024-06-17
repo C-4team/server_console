@@ -17,7 +17,7 @@ namespace Service.userService{
         public User Register(User newUser) {
             var existUser = userRepository.Get(newUser.Id);
 
-            if (existUser != null && existUser.Valid == 1)
+            if (existUser != null)
                 return null;  // 기존 유저는 회원가입 X
 
             userRepository.Insert(newUser);
