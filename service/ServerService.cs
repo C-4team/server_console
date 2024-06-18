@@ -145,12 +145,13 @@ namespace Service.serverService{
 
         void RequestController(User user){
             while (user.TCPclient.Connected){
-                string request = user.Reader.ReadLine()!;
+                string request = user.Reader.ReadLine();
                 if(request == "-1"){
                     user.TCPclient.Close();
                     return;
                 }
                 if(!string.IsNullOrEmpty(request) && !string.IsNullOrWhiteSpace(request)){
+                    Console.WriteLine("Requester : " + user.Username);
                     Console.WriteLine("RequestController : " + request);
 
                     string[] splitedRequest = request.Split(',');
@@ -202,6 +203,10 @@ namespace Service.serverService{
                     break;
                 
                 case 7:
+                    if(splitedRequest.Length == 2){
+                        string nextStrings = user.Reader.ReadLine()!;
+                        splitedRequest.Concat(nextStrings.Split(","));
+                    }
                     messageService.SendMessageToGroup(user, splitedRequest);
                     break;
                 case -1:

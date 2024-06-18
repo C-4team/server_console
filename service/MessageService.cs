@@ -56,6 +56,7 @@ namespace Service.messageService{
             string sendToAllUser = "11," + group.GroupId.ToString() + "," + user.Username + "," + splitedInfo[2] + "," + splitedInfo[3];
             if(avaliableUserInGroup.ContainsKey(long.Parse(splitedInfo[1]))){
                 foreach(var usr in avaliableUserInGroup[long.Parse(splitedInfo[1])]){
+                    Console.WriteLine(user.ToString() + " -> "+ usr.ToString());
                     usr.Writer.WriteLine(sendToAllUser);
                 }
             }
