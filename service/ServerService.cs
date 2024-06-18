@@ -50,6 +50,8 @@ namespace Service.serverService{
             userService.Register(heanho);
             groupService.CreateGroup(jihoon,["5","응소실 4조"]);
             groupService.InviteUserInGroup(["6","0","2020203080"]);
+            messageService.SendMessageToGroup(heanho,["7","0","더미메시지1",DateTime.Now.ToString()]);
+            messageService.SendMessageToGroup(jihoon,["7","0","더미메시지2",DateTime.Now.ToString()]);
             //userService.AddFriend(2022203078,2022203019);
             Console.WriteLine(dataBase.GetXml());
             
@@ -181,6 +183,7 @@ namespace Service.serverService{
                     break;
                 case 4:
                     result = groupService.EnterGroup(user,splitedRequest);
+                    Console.WriteLine(result);
                     user.Writer.WriteLine(result);
                     break;
                 case 5:

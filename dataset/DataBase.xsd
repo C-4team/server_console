@@ -25,17 +25,26 @@
           <xs:complexType>
             <xs:sequence>
               <xs:element name="gid" msdata:AutoIncrement="true" msprop:Generator_ColumnPropNameInTable="gidColumn" msprop:Generator_ColumnPropNameInRow="gid" msprop:Generator_UserColumnName="gid" msprop:Generator_ColumnVarNameInTable="columngid" type="xs:long" minOccurs="0" />
-              <xs:element name="name" msprop:Generator_UserColumnName="name" msprop:Generator_ColumnPropNameInTable="nameColumn" msprop:Generator_ColumnPropNameInRow="name" msprop:Generator_ColumnVarNameInTable="columnname" type="xs:string" minOccurs="0" />
+              <xs:element name="name" msprop:Generator_ColumnPropNameInTable="nameColumn" msprop:Generator_ColumnPropNameInRow="name" msprop:Generator_UserColumnName="name" msprop:Generator_ColumnVarNameInTable="columnname" type="xs:string" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="Message" msprop:Generator_RowEvHandlerName="MessageRowChangeEventHandler" msprop:Generator_RowDeletedName="MessageRowDeleted" msprop:Generator_RowDeletingName="MessageRowDeleting" msprop:Generator_RowEvArgName="MessageRowChangeEvent" msprop:Generator_TablePropName="Message" msprop:Generator_RowChangedName="MessageRowChanged" msprop:Generator_UserTableName="Message" msprop:Generator_RowChangingName="MessageRowChanging" msprop:Generator_RowClassName="MessageRow" msprop:Generator_TableClassName="MessageDataTable" msprop:Generator_TableVarName="tableMessage">
+        <xs:element name="User_in_Group" msprop:Generator_RowEvHandlerName="User_in_GroupRowChangeEventHandler" msprop:Generator_RowDeletedName="User_in_GroupRowDeleted" msprop:Generator_RowDeletingName="User_in_GroupRowDeleting" msprop:Generator_RowEvArgName="User_in_GroupRowChangeEvent" msprop:Generator_TablePropName="User_in_Group" msprop:Generator_RowChangedName="User_in_GroupRowChanged" msprop:Generator_UserTableName="User_in_Group" msprop:Generator_RowChangingName="User_in_GroupRowChanging" msprop:Generator_RowClassName="User_in_GroupRow" msprop:Generator_TableClassName="User_in_GroupDataTable" msprop:Generator_TableVarName="tableUser_in_Group">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="gid" msdata:AutoIncrement="true" msprop:Generator_ColumnPropNameInTable="gidColumn" msprop:Generator_ColumnPropNameInRow="gid" msprop:Generator_UserColumnName="gid" msprop:Generator_ColumnVarNameInTable="columngid" type="xs:long" minOccurs="0" />
               <xs:element name="uid" msprop:Generator_ColumnPropNameInTable="uidColumn" msprop:Generator_ColumnPropNameInRow="uid" msprop:Generator_UserColumnName="uid" msprop:Generator_ColumnVarNameInTable="columnuid" type="xs:long" minOccurs="0" />
-              <xs:element name="message" msprop:Generator_ColumnPropNameInTable="messageColumn" msprop:Generator_ColumnPropNameInRow="message" msprop:Generator_UserColumnName="message" msprop:Generator_ColumnVarNameInTable="columnmessage" type="xs:string" minOccurs="0" />
-              <xs:element name="datetime" msprop:Generator_ColumnPropNameInTable="datetimeColumn" msprop:Generator_ColumnPropNameInRow="datetime" msprop:Generator_UserColumnName="datetime" msprop:Generator_ColumnVarNameInTable="columndatetime" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="gid" msprop:Generator_ColumnPropNameInTable="gidColumn" msprop:Generator_ColumnPropNameInRow="gid" msprop:Generator_UserColumnName="gid" msprop:Generator_ColumnVarNameInTable="columngid" type="xs:long" minOccurs="0" />
+              <xs:element name="autokey" msdata:AutoIncrement="true" msprop:Generator_ColumnPropNameInTable="autokeyColumn" msprop:Generator_ColumnPropNameInRow="autokey" msprop:Generator_UserColumnName="autokey" msprop:Generator_ColumnVarNameInTable="columnautokey" type="xs:long" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="Message" msprop:Generator_RowClassName="MessageRow" msprop:Generator_RowEvHandlerName="MessageRowChangeEventHandler" msprop:Generator_RowDeletedName="MessageRowDeleted" msprop:Generator_RowDeletingName="MessageRowDeleting" msprop:Generator_RowEvArgName="MessageRowChangeEvent" msprop:Generator_TablePropName="Message" msprop:Generator_RowChangedName="MessageRowChanged" msprop:Generator_UserTableName="Message" msprop:Generator_RowChangingName="MessageRowChanging" msprop:Generator_TableClassName="MessageDataTable" msprop:Generator_TableVarName="tableMessage">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="gid" msprop:Generator_UserColumnName="gid" msprop:Generator_ColumnPropNameInTable="gidColumn" msprop:Generator_ColumnPropNameInRow="gid" msprop:Generator_ColumnVarNameInTable="columngid" type="xs:long" minOccurs="0" />
+              <xs:element name="uid" msprop:Generator_UserColumnName="uid" msprop:Generator_ColumnPropNameInTable="uidColumn" msprop:Generator_ColumnPropNameInRow="uid" msprop:Generator_ColumnVarNameInTable="columnuid" type="xs:long" minOccurs="0" />
+              <xs:element name="message" msprop:Generator_UserColumnName="message" msprop:Generator_ColumnPropNameInTable="messageColumn" msprop:Generator_ColumnPropNameInRow="message" msprop:Generator_ColumnVarNameInTable="columnmessage" type="xs:string" minOccurs="0" />
+              <xs:element name="datetime" msprop:Generator_UserColumnName="datetime" msprop:Generator_ColumnPropNameInTable="datetimeColumn" msprop:Generator_ColumnPropNameInRow="datetime" msprop:Generator_ColumnVarNameInTable="columndatetime" type="xs:dateTime" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -44,15 +53,6 @@
             <xs:sequence>
               <xs:element name="uid" msprop:Generator_ColumnPropNameInRow="uid" msprop:Generator_ColumnPropNameInTable="uidColumn" msprop:Generator_ColumnVarNameInTable="columnuid" msprop:Generator_UserColumnName="uid" type="xs:long" minOccurs="0" />
               <xs:element name="fid" msprop:Generator_ColumnPropNameInRow="fid" msprop:Generator_ColumnPropNameInTable="fidColumn" msprop:Generator_ColumnVarNameInTable="columnfid" msprop:Generator_UserColumnName="fid" type="xs:long" minOccurs="0" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="User_in_Group" msprop:Generator_RowEvHandlerName="User_in_GroupRowChangeEventHandler" msprop:Generator_RowDeletedName="User_in_GroupRowDeleted" msprop:Generator_RowDeletingName="User_in_GroupRowDeleting" msprop:Generator_RowEvArgName="User_in_GroupRowChangeEvent" msprop:Generator_TablePropName="User_in_Group" msprop:Generator_RowChangedName="User_in_GroupRowChanged" msprop:Generator_RowChangingName="User_in_GroupRowChanging" msprop:Generator_TableClassName="User_in_GroupDataTable" msprop:Generator_RowClassName="User_in_GroupRow" msprop:Generator_TableVarName="tableUser_in_Group" msprop:Generator_UserTableName="User_in_Group">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="uid" msprop:Generator_ColumnPropNameInRow="uid" msprop:Generator_ColumnPropNameInTable="uidColumn" msprop:Generator_ColumnVarNameInTable="columnuid" msprop:Generator_UserColumnName="uid" type="xs:long" minOccurs="0" />
-              <xs:element name="gid" msprop:Generator_ColumnPropNameInRow="gid" msprop:Generator_ColumnPropNameInTable="gidColumn" msprop:Generator_ColumnVarNameInTable="columngid" msprop:Generator_UserColumnName="gid" type="xs:long" minOccurs="0" />
-              <xs:element name="autokey" msdata:AutoIncrement="true" msprop:Generator_ColumnPropNameInRow="autokey" msprop:Generator_ColumnPropNameInTable="autokeyColumn" msprop:Generator_ColumnVarNameInTable="columnautokey" msprop:Generator_UserColumnName="autokey" type="xs:long" minOccurs="0" />
             </xs:sequence>
           </xs:complexType>
         </xs:element>
@@ -65,16 +65,6 @@
     <xs:unique name="gid">
       <xs:selector xpath=".//mstns:Group" />
       <xs:field xpath="mstns:gid" />
-    </xs:unique>
-    <xs:unique name="MessageKey1">
-      <xs:selector xpath=".//mstns:Message" />
-      <xs:field xpath="mstns:gid" />
-      <xs:field xpath="mstns:uid" />
-      <xs:field xpath="mstns:message" />
-    </xs:unique>
-    <xs:unique name="FriendKey1">
-      <xs:selector xpath=".//mstns:Friend" />
-      <xs:field xpath="mstns:uid" />
     </xs:unique>
   </xs:element>
 </xs:schema>

@@ -40,8 +40,9 @@ namespace Service.messageService{
             result += messages.Count.ToString();
             foreach(var msg in messages){
                 result += ",";
+                Console.WriteLine(msg.Uid);
                 User usr = userRepository.Get(msg.Uid);
-                result += user.Username + "," + msg.Msg + "," + msg.DateTime.ToString();
+                result += usr.Username + "," + msg.Msg + "," + msg.DateTime.ToString();
             }
 
             return result;
@@ -53,9 +54,12 @@ namespace Service.messageService{
             Group group = groupRepository.Get(long.Parse(splitedInfo[1]));
             messageRepository.Insert(new Message(long.Parse(splitedInfo[1]),user.Id,splitedInfo[2],DateTime.Parse(splitedInfo[3])));
             string sendToAllUser = "11," + group.GroupId.ToString() + "," + user.Username + "," + splitedInfo[2] + "," + splitedInfo[3];
-            foreach(var usr in avaliableUserInGroup[long.Parse(splitedInfo[1])]){
-                usr.Writer.WriteLine(sendToAllUser);
+            if(avaliableUserInGroup.ContainsKey(long.Parse(splitedInfo[1]))){
+                foreach(var usr in avaliableUserInGroup[long.Parse(splitedInfo[1])]){
+                    usr.Writer.WriteLine(sendToAllUser);
+                }
             }
+            
             return "";
             
         }

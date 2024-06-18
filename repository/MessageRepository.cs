@@ -38,11 +38,11 @@ namespace Repository.messageRepository{
                 orderby message["datetime"]
                 select message;
                 
-            var select9 = qurry.Take(9);
+            // var select9 = qurry.Take(9);
 
             List<Message> result = new List<Message>();
             foreach(var dr in qurry){
-                result.Add(new Message((long)dr[0],(long)dr[1],(string)dr[2],(DateTime)dr[3]));
+                result.Add(new Message((long)dr["gid"],(long)dr["uid"],(string)dr["message"],(DateTime)dr["datetime"]));
             }
             return result;
         }
